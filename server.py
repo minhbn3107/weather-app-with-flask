@@ -5,33 +5,33 @@ from waitress import serve
 app = Flask(__name__)
 
 
-@app.route('/')
-@app.route('/index')
+@app.route("/")
+@app.route("/index")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/weather')
+@app.route("/weather")
 def get_weather():
-    city = request.args.get('city')
+    city = request.args.get("city")
 
     # Check for empty strings or string with only spaces
     if not bool(city.strip()):
-        city = 'Ho Chi Minh City'
+        city = "Ho Chi Minh City"
 
     weather_data = get_current_weather(city)
 
     # City is not find by API
-    if not weather_data['cod'] == 200:
-        return render_template('city-not-found.html')
+    if not weather_data["cod"] == 200:
+        return render_template("city-not-found.html")
 
-    return render_template('weather.html',
-                           title=weather_data['name'],
-                           status=weather_data['weather'][0]['description'].capitalize(
+    return render_template("weather.html",
+                           title=weather_data["name"],
+                           status=weather_data["weather"][0]["description"].capitalize(
                            ),
-                           temp=f'{weather_data['main']['temp']:.1f}',
-                           feels_like=f'{weather_data['main']['feels_like']:.1f}')
+                           temp=f"{weather_data['main']['temp']:.1f}",
+                           feels_like=f"{weather_data['main']['feels_like']:.1f}")
 
 
-if __name__ == '__main__':
-    serve(app, host='0.0.0.0', port=8000)
+if __name__ == "__main__":
+    serve(app, host="0.0.0.0", port=8000)
